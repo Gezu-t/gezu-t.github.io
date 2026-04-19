@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Gezahegn Lemma — Senior Software Engineer specializing in Java, Spring Boot, and microservices. Currently building for WIPO at Fincons Group." />
+<title>Gezahegn Lemma — Senior Software Engineer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Geist:wght@300..700&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+  :root {
+    --ink: #0a0d1a;
+    --ink-2: #111528;
+    --ink-3: #1a1f35;
+    --cream: #f5ede0;
+    --cream-dim: #c9c2b6;
+    --muted: #7a7f96;
+    --amber: #ff9d4d;
+    --violet: #a78bfa;
+    --emerald: #34d399;
+    --rose: #fb7185;
+  }
+
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Geist', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  .font-serif { font-family: 'Fraunces', serif; font-optical-sizing: auto; }
+  .font-mono  { font-family: 'JetBrains Mono', monospace; }
+
+  /* ---------- Animated gradient mesh background ---------- */
+  .mesh-bg {
+    position: fixed; inset: 0; z-index: -2;
+    background: var(--ink);
+    overflow: hidden;
+  }
+  .mesh-bg::before,
+  .mesh-bg::after,
+  .blob {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.35;
+    will-change: transform;
+  }
+  .mesh-bg::before {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--amber), transparent 70%);
+    top: -200px; left: -150px;
+    animation: float1 22s ease-in-out infinite;
+  }
+  .mesh-bg::after {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, var(--violet), transparent 70%);
+    bottom: -250px; right: -200px;
+    animation: float2 28s ease-in-out infinite;
+  }
+  .blob {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, var(--emerald), transparent 70%);
+    top: 40%; left: 50%;
+    opacity: 0.18;
+    animation: float3 25s ease-in-out infinite;
+  }
+  @keyframes float1 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50%     { transform: translate(300px, 200px) scale(1.2); }
+  }
+  @keyframes float2 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50%     { transform: translate(-250px, -150px) scale(0.85); }
+  }
+  @keyframes float3 {
+    0%,100% { transform: translate(-50%,-50%) scale(1); }
+    50%     { transform: translate(-30%,-60%) scale(1.3); }
+  }
+
+  /* ---------- Noise overlay ---------- */
+  .noise {
+    position: fixed; inset: 0; z-index: -1;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Cursor spotlight ---------- */
+  .spotlight {
+    position: fixed; inset: 0; z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(600px circle at var(--mx,50%) var(--my,50%),
+      rgba(255, 157, 77, 0.08), transparent 40%);
+    transition: background 0.2s;
+  }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s cubic-bezier(.2,.8,.2,1), transform 0.9s cubic-bezier(.2,.8,.2,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ---------- Gradient text ---------- */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--cream) 0%, var(--amber) 50%, var(--violet) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .gradient-text-warm {
+    background: linear-gradient(135deg, var(--amber), var(--rose));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ---------- Card tilt ---------- */
+  .card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    transition: transform 0.4s cubic-bezier(.2,.8,.2,1), border-color 0.4s, box-shadow 0.4s;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 157, 77, 0.3);
+    box-shadow: 0 20px 60px -20px rgba(255, 157, 77, 0.15);
+  }
+
+  /* ---------- Tag chips ---------- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--cream-dim);
+    transition: all 0.25s;
+  }
+  .chip:hover {
+    background: rgba(255, 157, 77, 0.1);
+    border-color: rgba(255, 157, 77, 0.4);
+    color: var(--amber);
+  }
+
+  /* ---------- Timeline ---------- */
+  .timeline-line {
+    background: linear-gradient(180deg, transparent, var(--amber), var(--violet), transparent);
+  }
+  .timeline-dot {
+    background: var(--ink);
+    border: 2px solid var(--amber);
+    box-shadow: 0 0 0 4px var(--ink), 0 0 20px rgba(255,157,77,0.4);
+  }
+
+  /* ---------- Nav ---------- */
+  .nav-blur {
+    background: rgba(10, 13, 26, 0.6);
+    backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav-link {
+    position: relative;
+    transition: color 0.25s;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -4px;
+    width: 0; height: 1px;
+    background: var(--amber);
+    transition: width 0.3s;
+  }
+  .nav-link:hover { color: var(--amber); }
+  .nav-link:hover::after { width: 100%; }
+
+  /* ---------- Button ---------- */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--amber), var(--rose));
+    color: var(--ink);
+    font-weight: 600;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -10px rgba(255,157,77,0.5);
+  }
+  .btn-ghost {
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--cream);
+    transition: all 0.25s;
+  }
+  .btn-ghost:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  /* ---------- Typewriter cursor ---------- */
+  .cursor-blink::after {
+    content: '▍';
+    color: var(--amber);
+    animation: blink 1s steps(2) infinite;
+    margin-left: 2px;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  /* ---------- Section labels ---------- */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--amber);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Decorative grid ---------- */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  /* ---------- Scrollbar ---------- */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255,157,77,0.3);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--amber); }
+
+  /* ---------- Link underline ---------- */
+  .link-underline {
+    background-image: linear-gradient(var(--amber),var(--amber));
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s;
+  }
+  .link-underline:hover {
+    background-size: 100% 2px;
+  }
+
+  @media (max-width: 768px) {
+    .mesh-bg::before, .mesh-bg::after, .blob { filter: blur(60px); }
+  }
+</style>
+</head>
+
+<body class="relative">
+
+  <!-- Background layers -->
+  <div class="mesh-bg"><div class="blob"></div></div>
+  <div class="noise"></div>
+  <div class="spotlight" id="spotlight"></div>
+
+  <!-- Navigation -->
+  <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#hero" class="font-serif text-xl font-semibold tracking-tight">
+        <span class="gradient-text-warm">GL</span><span class="text-white">.</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm">
+        <a href="#about"          class="nav-link text-gray-300">About</a>
+        <a href="#experience"     class="nav-link text-gray-300">Experience</a>
+        <a href="#projects"       class="nav-link text-gray-300">Projects</a>
+        <a href="#opensource"     class="nav-link text-gray-300">Open Source</a>
+        <a href="#skills"         class="nav-link text-gray-300">Skills</a>
+        <a href="#certifications" class="nav-link text-gray-300">Credentials</a>
+        <a href="#contact"        class="nav-link text-gray-300">Contact</a>
+      </div>
+      <a href="#contact" class="btn-primary px-5 py-2 rounded-full text-sm hidden md:inline-block">Let's talk</a>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="min-h-screen flex items-center relative pt-24 pb-16">
+    <div class="max-w-6xl mx-auto px-6 w-full">
+      <div class="reveal">
+        <p class="section-label mb-6">
+          <span class="inline-block w-8 h-px bg-amber-500 align-middle mr-3"></span>
+          Senior Software Engineer · Rende, Italy
+        </p>
+      </div>
+
+      <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl font-light leading-[0.95] tracking-tight mb-8 reveal reveal-delay-1">
+        Gezahegn<br/>
+        <span class="italic gradient-text">Lemma</span>
+      </h1>
+
+      <div class="reveal reveal-delay-2 max-w-2xl mb-10">
+        <p class="text-xl md:text-2xl text-gray-300 leading-relaxed">
+          I build <span class="text-white font-medium">robust backend systems</span> and full-stack applications —
+          currently engineering the <span class="gradient-text-warm font-semibold">WIPO Connect</span> platform
+          at <a href="https://www.finconsgroup.com" class="link-underline text-white" target="_blank" rel="noopener">Fincons Group</a>.
+        </p>
+      </div>
+
+      <div class="reveal reveal-delay-3 flex flex-wrap items-center gap-4 mb-16">
+        <a href="#projects" class="btn-primary px-7 py-3 rounded-full">See my work</a>
+        <a href="#contact"  class="btn-ghost px-7 py-3 rounded-full">Get in touch</a>
+      </div>
+
+      <div class="reveal reveal-delay-4">
+        <p class="font-mono text-xs text-gray-500 mb-3">// currently typing in</p>
+        <div id="typewriter" class="font-mono text-lg md:text-xl text-amber-300 cursor-blink min-h-[2rem]"></div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 opacity-50">
+        <span class="font-mono text-xs text-gray-400">scroll</span>
+        <div class="w-px h-12 bg-gradient-to-b from-amber-500 to-transparent"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" class="py-24 relative">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-12 gap-12 items-start">
+        <div class="md:col-span-4 reveal">
+          <p class="section-label mb-4">01 / About</p>
+          <h2 class="font-serif text-4xl md:text-5xl font-light leading-tight">
+            Engineering <span class="italic gradient-text-warm">with purpose.</span>
+          </h2>
+        </div>
+
+        <div class="md:col-span-8 reveal reveal-delay-2 space-y-6 text-gray-300 text-lg leading-relaxed">
+          <p>
+            I'm a Senior Software Engineer with a <span class="text-white">Master's in Computer Science</span>
+            from the University of Calabria and over a decade of experience shipping software for enterprise
+            clients — from intellectual property giants to major Italian banks.
+          </p>
+          <p>
+            My sweet spot is <span class="text-white">Java + Spring Boot microservices</span> with a strong
+            frontend sensibility (JSP, jQuery, React). I care about clean architecture, meaningful tests,
+            and code that other engineers will still thank you for three years from now.
+          </p>
+          <p>
+            Outside of delivery work, I'm <span class="text-white">CKAD-certified</span>, love a well-tuned
+            query, and have a soft spot for systems that have to move real money or enforce real rights.
+          </p>
+
+          <div class="grid grid-cols-3 gap-4 pt-4">
+            <div class="text-center p-4 card rounded-xl">
+              <div class="font-serif text-3xl md:text-4xl gradient-text">12+</div>
+              <div class="text-xs text-gray-400 mt-1 font-mono">Years coding</div>
+            </div>
+            <div class="text-center p-4 card rounded-xl">
+              <div class="font-serif text-3xl md:text-4xl gradient-text">8+</div>
+              <div class="text-xs text-gray-400 mt-1 font-mono">Enterprise projects</div>
+            </div>
+            <a href="https://github.com/Gezu-t" target="_blank" rel="noopener" class="text-center p-4 card rounded-xl block">
+              <div class="font-serif text-3xl md:text-4xl gradient-text">58</div>
+              <div class="text-xs text-gray-400 mt-1 font-mono">Public repos →</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section id="experience" class="py-24 relative">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal mb-16">
+        <p class="section-label mb-4">02 / Experience</p>
+        <h2 class="font-serif text-4xl md:text-6xl font-light leading-tight">
+          A <span class="italic gradient-text">decade</span> of delivery.
+        </h2>
+      </div>
+
+      <!-- Timeline -->
+      <div class="relative">
+        <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-px timeline-line md:-translate-x-1/2"></div>
+
+        <!-- Job 1 -->
+        <div class="relative mb-16 reveal">
+          <div class="absolute left-4 md:left-1/2 w-4 h-4 rounded-full timeline-dot md:-translate-x-1/2 top-2"></div>
+          <div class="md:grid md:grid-cols-2 md:gap-12">
+            <div class="md:text-right md:pr-12 pl-12 md:pl-0">
+              <p class="font-mono text-sm text-amber-400">Nov 2023 — Present</p>
+              <p class="text-sm text-gray-500 mt-1">Rende, Italy · On-site</p>
+            </div>
+            <div class="pl-12 md:pl-0 mt-2 md:mt-0">
+              <h3 class="font-serif text-2xl text-white">Senior Software Engineer Analyst</h3>
+              <p class="text-amber-300 font-medium mb-3">Fincons Group SPA · WIPO Connect</p>
+              <p class="text-gray-400 leading-relaxed mb-4">
+                Engineering a microservices platform for Collective Management Organizations — Right Owners,
+                Works, Agreements, Licensing, Matching, Distribution and Reserve Management. Contributed to
+                Common Royalty Distribution (CRD) ingestion, massive local→shared data sync, and ISNI
+                validation integration.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="chip">Java 17</span>
+                <span class="chip">Spring MVC</span>
+                <span class="chip">JSP</span>
+                <span class="chip">jQuery</span>
+                <span class="chip">JUnit 5</span>
+                <span class="chip">Selenium</span>
+                <span class="chip">Jasper</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="relative mb-16 reveal">
+          <div class="absolute left-4 md:left-1/2 w-4 h-4 rounded-full timeline-dot md:-translate-x-1/2 top-2"></div>
+          <div class="md:grid md:grid-cols-2 md:gap-12">
+            <div class="md:order-2 md:pl-12 pl-12 md:pl-12">
+              <p class="font-mono text-sm text-amber-400">Jun 2023 — Sep 2023</p>
+              <p class="text-sm text-gray-500 mt-1">Italy · Hybrid</p>
+            </div>
+            <div class="md:order-1 md:text-right md:pr-12 pl-12 md:pl-0 mt-2 md:mt-0">
+              <h3 class="font-serif text-2xl text-white">Senior Java Developer</h3>
+              <p class="text-amber-300 font-medium mb-3">Moveo srl · Innovation Project</p>
+              <p class="text-gray-400 leading-relaxed mb-4">
+                Designed and built a real-time chat system on a microservices architecture with Redis for
+                session data, Elasticsearch for message search, Kafka for eventing, and AEM integration
+                for news content display.
+              </p>
+              <div class="flex flex-wrap gap-2 md:justify-end">
+                <span class="chip">Spring Boot</span>
+                <span class="chip">Kafka</span>
+                <span class="chip">Redis</span>
+                <span class="chip">Elasticsearch</span>
+                <span class="chip">WebSocket</span>
+                <span class="chip">AEM</span>
+                <span class="chip">Docker</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Job 3 -->
+        <div class="relative mb-16 reveal">
+          <div class="absolute left-4 md:left-1/2 w-4 h-4 rounded-full timeline-dot md:-translate-x-1/2 top-2"></div>
+          <div class="md:grid md:grid-cols-2 md:gap-12">
+            <div class="md:text-right md:pr-12 pl-12 md:pl-0">
+              <p class="font-mono text-sm text-amber-400">2020 — 2023</p>
+              <p class="text-sm text-gray-500 mt-1">Italy · Multiple engagements</p>
+            </div>
+            <div class="pl-12 md:pl-0 mt-2 md:mt-0">
+              <h3 class="font-serif text-2xl text-white">Java Engineer · Banking &amp; Fintech</h3>
+              <p class="text-amber-300 font-medium mb-3">UniCredit · BPS Suisse · Sky.com</p>
+              <p class="text-gray-400 leading-relaxed mb-4">
+                Delivered the Customer Protection Workflow System for UniCredit, the BPS Suisse SICAV
+                portal, a Sky.com customer alert pipeline and a Tibco integration layer. Environments
+                ranged from strict banking compliance to high-throughput media platforms.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="chip">Spring Boot</span>
+                <span class="chip">Spring Security</span>
+                <span class="chip">Magnolia</span>
+                <span class="chip">Tibco</span>
+                <span class="chip">PostgreSQL</span>
+                <span class="chip">REST APIs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Job 4 -->
+        <div class="relative mb-8 reveal">
+          <div class="absolute left-4 md:left-1/2 w-4 h-4 rounded-full timeline-dot md:-translate-x-1/2 top-2"></div>
+          <div class="md:grid md:grid-cols-2 md:gap-12">
+            <div class="md:order-2 md:pl-12 pl-12">
+              <p class="font-mono text-sm text-amber-400">2012 — 2015</p>
+              <p class="text-sm text-gray-500 mt-1">Addis Ababa, Ethiopia</p>
+            </div>
+            <div class="md:order-1 md:text-right md:pr-12 pl-12 md:pl-0 mt-2 md:mt-0">
+              <h3 class="font-serif text-2xl text-white">Software Developer</h3>
+              <p class="text-amber-300 font-medium mb-3">Pegasoft · Gov Digital Transformation</p>
+              <p class="text-gray-400 leading-relaxed mb-4">
+                Contributed to Ethiopia's Government Digital Transformation Initiative and a Therapeutic
+                Portal System — building REST APIs, data models and back-office tooling that served
+                national-scale users.
+              </p>
+              <div class="flex flex-wrap gap-2 md:justify-end">
+                <span class="chip">Java</span>
+                <span class="chip">MySQL</span>
+                <span class="chip">REST APIs</span>
+                <span class="chip">Public sector</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section id="projects" class="py-24 relative">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal mb-16 flex items-end justify-between flex-wrap gap-6">
+        <div>
+          <p class="section-label mb-4">03 / Selected Projects</p>
+          <h2 class="font-serif text-4xl md:text-6xl font-light leading-tight">
+            Things I've <span class="italic gradient-text-warm">shipped.</span>
+          </h2>
+        </div>
+        <p class="text-gray-400 max-w-sm">
+          A curated subset — from global IP management to national-scale government platforms.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <article class="card rounded-2xl p-8 reveal">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-rose-500 flex items-center justify-center font-serif text-xl font-bold text-slate-900">W</div>
+            <span class="font-mono text-xs text-gray-500">2023 — NOW</span>
+          </div>
+          <h3 class="font-serif text-3xl text-white mb-2">WIPO Connect</h3>
+          <p class="text-amber-300 text-sm font-mono mb-4">// royalty &amp; rights management</p>
+          <p class="text-gray-400 leading-relaxed mb-6">
+            Microservices platform for Collective Management Organizations — seamless sync between local,
+            shared and external services, advanced AI matching, ISNI integration and royalty distribution.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="chip">Java 17</span>
+            <span class="chip">Spring MVC</span>
+            <span class="chip">Microservices</span>
+            <span class="chip">JSP</span>
+          </div>
+        </article>
+
+        <article class="card rounded-2xl p-8 reveal reveal-delay-1">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-emerald-400 flex items-center justify-center font-serif text-xl font-bold text-slate-900">M</div>
+            <span class="font-mono text-xs text-gray-500">2023</span>
+          </div>
+          <h3 class="font-serif text-3xl text-white mb-2">Moveo Innovation Project</h3>
+          <p class="text-amber-300 text-sm font-mono mb-4">// real-time chat on microservices</p>
+          <p class="text-gray-400 leading-relaxed mb-6">
+            End-to-end architecture for a real-time chat platform — Redis for ephemeral state,
+            Elasticsearch for message search, Kafka for pub/sub and AEM for news integration.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="chip">Spring Boot</span>
+            <span class="chip">Kafka</span>
+            <span class="chip">Elasticsearch</span>
+            <span class="chip">Redis</span>
+          </div>
+        </article>
+
+        <article class="card rounded-2xl p-8 reveal">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-amber-400 flex items-center justify-center font-serif text-xl font-bold text-slate-900">U</div>
+            <span class="font-mono text-xs text-gray-500">2021 — 2022</span>
+          </div>
+          <h3 class="font-serif text-3xl text-white mb-2">UniCredit Customer Protection</h3>
+          <p class="text-amber-300 text-sm font-mono mb-4">// workflow &amp; compliance</p>
+          <p class="text-gray-400 leading-relaxed mb-6">
+            Java application for customer protection workflows — review queues, approvals and audit trails
+            for one of Italy's largest banks, with strict compliance and data-security requirements.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="chip">Spring Boot</span>
+            <span class="chip">Spring Security</span>
+            <span class="chip">PostgreSQL</span>
+          </div>
+        </article>
+
+        <article class="card rounded-2xl p-8 reveal reveal-delay-1">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-violet-500 flex items-center justify-center font-serif text-xl font-bold text-slate-900">S</div>
+            <span class="font-mono text-xs text-gray-500">2020 — 2021</span>
+          </div>
+          <h3 class="font-serif text-3xl text-white mb-2">Sky.com Customer Alert</h3>
+          <p class="text-amber-300 text-sm font-mono mb-4">// high-throughput alerting</p>
+          <p class="text-gray-400 leading-relaxed mb-6">
+            Customer alert system for Sky.com — ingestion pipelines, notification dispatch and
+            configurable alert rules running against a large user base at media-scale throughput.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="chip">Java</span>
+            <span class="chip">REST APIs</span>
+            <span class="chip">Magnolia</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OPEN SOURCE / SIDE PROJECTS ============ -->
+  <section id="opensource" class="py-24 relative">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal mb-16 flex items-end justify-between flex-wrap gap-6">
+        <div>
+          <p class="section-label mb-4">03.5 / Open Source</p>
+          <h2 class="font-serif text-4xl md:text-6xl font-light leading-tight">
+            Side <span class="italic gradient-text">quests</span> on GitHub.
+          </h2>
+        </div>
+        <a href="https://github.com/Gezu-t" target="_blank" rel="noopener" class="btn-ghost px-6 py-3 rounded-full text-sm inline-flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          All 58 repos
+        </a>
+      </div>
+
+      <div class="reveal mb-10">
+        <div class="flex flex-wrap items-center gap-3 text-sm">
+          <span class="chip">🏔️ Arctic Code Vault Contributor</span>
+          <span class="chip">🦈 Pull Shark</span>
+          <span class="font-mono text-xs text-gray-500">// github.com/Gezu-t</span>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <a href="https://github.com/Gezu-t/devtomcat" target="_blank" rel="noopener" class="card rounded-xl p-6 reveal block group">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-rose-500 flex items-center justify-center text-slate-900 font-mono text-sm font-bold">{ }</div>
+            <span class="font-mono text-[10px] text-gray-500">JAVA</span>
+          </div>
+          <h3 class="font-serif text-xl text-white mb-2 group-hover:text-amber-300 transition-colors">devtomcat</h3>
+          <p class="text-xs font-mono text-amber-400/70 mb-3">// IntelliJ plugin</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            IntelliJ IDEA plugin offering advanced Apache Tomcat server management for Community Edition users.
+          </p>
+        </a>
+
+        <a href="https://github.com/Gezu-t/online-exam-system" target="_blank" rel="noopener" class="card rounded-xl p-6 reveal reveal-delay-1 block group">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-emerald-400 flex items-center justify-center text-slate-900 font-mono text-sm font-bold">✎</div>
+            <span class="font-mono text-[10px] text-gray-500">JAVA</span>
+          </div>
+          <h3 class="font-serif text-xl text-white mb-2 group-hover:text-amber-300 transition-colors">online-exam-system</h3>
+          <p class="text-xs font-mono text-amber-400/70 mb-3">// Spring Boot</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            Full-stack online exam platform built on Spring Boot — exam creation, scheduling, grading, and result tracking.
+          </p>
+        </a>
+
+        <a href="https://github.com/Gezu-t/HRMSystem" target="_blank" rel="noopener" class="card rounded-xl p-6 reveal reveal-delay-2 block group">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-400 to-amber-400 flex items-center justify-center text-slate-900 font-mono text-sm font-bold">HR</div>
+            <span class="font-mono text-[10px] text-gray-500">JAVA</span>
+          </div>
+          <h3 class="font-serif text-xl text-white mb-2 group-hover:text-amber-300 transition-colors">HRMSystem</h3>
+          <p class="text-xs font-mono text-amber-400/70 mb-3">// HR management</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            Human Resource Management system — employee records, departments, attendance and leave workflows.
+          </p>
+        </a>
+
+        <a href="https://github.com/Gezu-t/SpringCloudAPIGateway" target="_blank" rel="noopener" class="card rounded-xl p-6 reveal block group">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-rose-500 to-violet-500 flex items-center justify-center text-slate-900 font-mono text-sm font-bold">⇄</div>
+            <span class="font-mono text-[10px] text-gray-500">JAVA</span>
+          </div>
+          <h3 class="font-serif text-xl text-white mb-2 group-hover:text-amber-300 transition-colors">SpringCloudAPIGateway</h3>
+          <p class="text-xs font-mono text-amber-400/70 mb-3">// microservices routing</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            Spring Cloud Gateway experiment — service discovery, routing, and load balancing for microservices.
+          </p>
+        </a>
+
+        <a href="https://github.com/Gezu-t/pos" target="_blank" rel="noopener" class="card rounded-xl p-6 reveal reveal-delay-1 block group">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-400 to-emerald-400 flex items-center justify-center text-slate-900 font-mono text-sm font-bold">$</div>
+            <span class="font-mono text-[10px] text-gray-500">JAVA</span>
+          </div>
+          <h3 class="font-serif text-xl text-white mb-2 group-hover:text-amber-300 transition-colors">pos</h3>
+          <p class="text-xs font-mono text-amber-400/70 mb-3">// point of sale</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            Point-of-sale system covering inventory, sales transactions, receipts and basic reporting.
+          </p>
+        </a>
+
+        <a href="https://github.com/Gezu-t/grievance-ui" target="_blank" rel="noopener" class="card rounded-xl p-6 reveal reveal-delay-2 block group">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-400 to-rose-500 flex items-center justify-center text-slate-900 font-mono text-sm font-bold">&lt;/&gt;</div>
+            <span class="font-mono text-[10px] text-gray-500">TS</span>
+          </div>
+          <h3 class="font-serif text-xl text-white mb-2 group-hover:text-amber-300 transition-colors">grievance-ui</h3>
+          <p class="text-xs font-mono text-amber-400/70 mb-3">// TypeScript frontend</p>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            TypeScript UI layer for a grievance management system — case submission, tracking and resolution workflow.
+          </p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+  <section id="skills" class="py-24 relative">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal mb-16">
+        <p class="section-label mb-4">04 / Toolbelt</p>
+        <h2 class="font-serif text-4xl md:text-6xl font-light leading-tight">
+          The <span class="italic gradient-text">stack</span> I reach for.
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div class="card rounded-2xl p-6 reveal">
+          <div class="font-mono text-xs text-amber-400 mb-4">/* backend */</div>
+          <h3 class="font-serif text-xl text-white mb-4">Backend</h3>
+          <ul class="space-y-2 text-gray-400 text-sm">
+            <li>Java 8 / 11 / 17</li>
+            <li>Spring Boot</li>
+            <li>Spring MVC · Security</li>
+            <li>Spring Data · WebSocket</li>
+            <li>Hibernate / JPA</li>
+            <li>Maven</li>
+          </ul>
+        </div>
+
+        <div class="card rounded-2xl p-6 reveal reveal-delay-1">
+          <div class="font-mono text-xs text-amber-400 mb-4">/* frontend */</div>
+          <h3 class="font-serif text-xl text-white mb-4">Frontend</h3>
+          <ul class="space-y-2 text-gray-400 text-sm">
+            <li>React</li>
+            <li>JSP · jQuery</li>
+            <li>HTML · CSS · Tailwind</li>
+            <li>JavaScript (ES6+)</li>
+            <li>Magnolia · AEM</li>
+          </ul>
+        </div>
+
+        <div class="card rounded-2xl p-6 reveal reveal-delay-2">
+          <div class="font-mono text-xs text-amber-400 mb-4">/* data */</div>
+          <h3 class="font-serif text-xl text-white mb-4">Data &amp; Messaging</h3>
+          <ul class="space-y-2 text-gray-400 text-sm">
+            <li>PostgreSQL · MySQL</li>
+            <li>Redis</li>
+            <li>Elasticsearch</li>
+            <li>Apache Kafka</li>
+            <li>Jasper Reports</li>
+          </ul>
+        </div>
+
+        <div class="card rounded-2xl p-6 reveal reveal-delay-3">
+          <div class="font-mono text-xs text-amber-400 mb-4">/* devops */</div>
+          <h3 class="font-serif text-xl text-white mb-4">DevOps &amp; QA</h3>
+          <ul class="space-y-2 text-gray-400 text-sm">
+            <li>Docker · Kubernetes</li>
+            <li>Git · GitLab · GitHub</li>
+            <li>BitBucket · CI/CD</li>
+            <li>JUnit 5 · Mockito</li>
+            <li>Selenium</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CERTIFICATIONS ============ -->
+  <section id="certifications" class="py-24 relative">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal mb-16">
+        <p class="section-label mb-4">05 / Credentials</p>
+        <h2 class="font-serif text-4xl md:text-6xl font-light leading-tight">
+          Certifications &amp; <span class="italic gradient-text-warm">education.</span>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- CKAD -->
+        <div class="card rounded-2xl p-8 reveal">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-rose-500 flex items-center justify-center text-slate-900 font-serif text-2xl font-bold">K</div>
+            <div>
+              <p class="font-mono text-xs text-amber-400">CERTIFICATION</p>
+              <h3 class="font-serif text-2xl text-white leading-tight">Certified Kubernetes Application Developer</h3>
+            </div>
+          </div>
+          <p class="text-gray-400 mb-3">The Linux Foundation · <span class="text-amber-300">CKAD</span></p>
+          <p class="text-sm text-gray-500 font-mono">Apr 2022 · Active</p>
+        </div>
+
+        <!-- ML -->
+        <div class="card rounded-2xl p-8 reveal reveal-delay-1">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-emerald-400 flex items-center justify-center text-slate-900 font-serif text-2xl font-bold">ML</div>
+            <div>
+              <p class="font-mono text-xs text-amber-400">CERTIFICATION</p>
+              <h3 class="font-serif text-2xl text-white leading-tight">Machine Learning</h3>
+            </div>
+          </div>
+          <p class="text-gray-400 mb-3">Coursera · Stanford Online</p>
+          <p class="text-sm text-gray-500 font-mono">May 2019</p>
+        </div>
+
+        <!-- Masters -->
+        <div class="card rounded-2xl p-8 reveal">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-amber-400 flex items-center justify-center text-slate-900 font-serif text-2xl font-bold">M</div>
+            <div>
+              <p class="font-mono text-xs text-amber-400">EDUCATION</p>
+              <h3 class="font-serif text-2xl text-white leading-tight">Master's in Computer Science</h3>
+            </div>
+          </div>
+          <p class="text-gray-400 mb-3">University of Calabria · Rende, Italy</p>
+          <p class="text-sm text-gray-500 font-mono">Oct 2015 — Dec 2019</p>
+        </div>
+
+        <!-- Bachelors -->
+        <div class="card rounded-2xl p-8 reveal reveal-delay-1">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-violet-500 flex items-center justify-center text-slate-900 font-serif text-2xl font-bold">B</div>
+            <div>
+              <p class="font-mono text-xs text-amber-400">EDUCATION</p>
+              <h3 class="font-serif text-2xl text-white leading-tight">Bachelor's in Computer Science</h3>
+            </div>
+          </div>
+          <p class="text-gray-400 mb-3">MicroLink Information Technology College</p>
+          <p class="text-sm text-gray-500 font-mono">Sep 2007 — Aug 2010</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="py-32 relative">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <div class="reveal">
+        <p class="section-label mb-6">06 / Let's connect</p>
+      </div>
+
+      <h2 class="font-serif text-5xl md:text-7xl font-light leading-tight mb-8 reveal reveal-delay-1">
+        Have an <span class="italic gradient-text-warm">idea</span> worth building?
+      </h2>
+
+      <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto reveal reveal-delay-2">
+        I'm open to interesting engineering challenges, collaborations, and backend roles with strong
+        engineering culture. Drop me a line.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 mb-16 reveal reveal-delay-3">
+        <a href="https://www.linkedin.com/in/gezahegn-t-l-29ba9475/" target="_blank" rel="noopener" class="btn-primary px-8 py-4 rounded-full text-base inline-flex items-center gap-2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.852 3.37-1.852 3.601 0 4.267 2.37 4.267 5.455v6.288zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Connect on LinkedIn
+        </a>
+        <a href="https://github.com/Gezu-t" target="_blank" rel="noopener" class="btn-ghost px-8 py-4 rounded-full text-base inline-flex items-center gap-2">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          View my GitHub
+        </a>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-6 text-sm reveal reveal-delay-4">
+        <span class="text-gray-500 font-mono">📍 Rende, Calabria · Italy</span>
+        <span class="text-gray-700">·</span>
+        <span class="text-gray-500 font-mono">Open to opportunities</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="py-10 border-t border-white/5 relative">
+    <div class="max-w-6xl mx-auto px-6 flex flex-wrap items-center justify-between gap-4">
+      <p class="font-mono text-xs text-gray-500">
+        © 2026 Gezahegn Lemma · Crafted with intent in Calabria.
+      </p>
+      <p class="font-mono text-xs text-gray-600">
+        Java · Spring · React · Built in a single file.
+      </p>
+    </div>
+  </footer>
+
+<script>
+  // ---------- Scroll reveal ----------
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ---------- Cursor spotlight ----------
+  const spot = document.getElementById('spotlight');
+  window.addEventListener('mousemove', (e) => {
+    spot.style.setProperty('--mx', e.clientX + 'px');
+    spot.style.setProperty('--my', e.clientY + 'px');
+  });
+
+  // ---------- Typewriter ----------
+  const phrases = [
+    'Java 17 · Spring Boot · Microservices',
+    'React · JSP · jQuery',
+    'Kafka · Redis · Elasticsearch',
+    'Docker · Kubernetes (CKAD)',
+    'Shipping intent, one commit at a time.'
+  ];
+  const tw = document.getElementById('typewriter');
+  let pi = 0, ci = 0, deleting = false;
+
+  function tick() {
+    const current = phrases[pi];
+    if (!deleting) {
+      tw.textContent = current.slice(0, ++ci);
+      if (ci === current.length) {
+        deleting = true;
+        return setTimeout(tick, 1800);
+      }
+    } else {
+      tw.textContent = current.slice(0, --ci);
+      if (ci === 0) {
+        deleting = false;
+        pi = (pi + 1) % phrases.length;
+      }
+    }
+    setTimeout(tick, deleting ? 30 : 55);
+  }
+  tick();
+
+  // ---------- Nav scroll state ----------
+  // (Could add a class on scroll for deeper nav contrast if desired.)
+</script>
+</body>
+</html>
